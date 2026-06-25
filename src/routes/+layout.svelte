@@ -3,6 +3,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
+	import { blogEnabled } from '$lib/features';
 
 	let { children } = $props();
 
@@ -28,8 +29,8 @@
 	const links = [
 		{ href: '/', label: 'home' },
 		{ href: '/whoami', label: 'whoami' },
-		{ href: '/blog', label: 'blog' },
 		{ href: '/contact', label: 'contact' },
+		...(blogEnabled ? [{ href: '/blog', label: 'blog' }] : [])
 	];
 
 	const isHome = $derived(page.url.pathname === '/');

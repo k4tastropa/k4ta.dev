@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
+	import { blogEnabled } from '$lib/features';
 
 	let { data } = $props();
 
@@ -68,8 +69,8 @@
 	const links = [
 		{ href: '/', label: 'home' },
 		{ href: '/whoami', label: 'whoami' },
-		{ href: '/blog', label: 'blog' },
 		{ href: '/contact', label: 'contact' },
+		...(blogEnabled ? [{ href: '/blog', label: 'blog' }] : [])
 	];
 </script>
 
@@ -104,17 +105,19 @@
 				>[theme]</button>
 			</nav>
 
-			<div class="space-y-4">
-				<p class="font-mono text-sm" style="color: var(--text-muted)">Latest:</p>
+			{#if blogEnabled && data.latestPosts.length}
+				<div class="space-y-4">
+					<p class="font-mono text-sm" style="color: var(--text-muted)">Latest:</p>
 
-				{#each data.latestPosts as post}
-					<a href="/blog/{post.id}" class="block group">
-						<h3 class="font-heading text-lg font-semibold transition-colors" style="color: var(--text)">{post.title}</h3>
-						<p class="text-sm" style="color: var(--text-muted)">{post.excerpt}</p>
-						<p class="font-mono text-xs" style="color: var(--accent)">{post.date}</p>
-					</a>
-				{/each}
-			</div>
+					{#each data.latestPosts as post}
+						<a href="/blog/{post.id}" class="block group">
+							<h3 class="font-heading text-lg font-semibold transition-colors" style="color: var(--text)">{post.title}</h3>
+							<p class="text-sm" style="color: var(--text-muted)">{post.excerpt}</p>
+							<p class="font-mono text-xs" style="color: var(--accent)">{post.date}</p>
+						</a>
+					{/each}
+				</div>
+			{/if}
 		</div>
 
 		<div class="flex-shrink-0">
